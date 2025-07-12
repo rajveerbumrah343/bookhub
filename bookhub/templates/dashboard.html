@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="mb-4">Welcome, {{ username }}!</h2>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5>Available Books</h5>
+            </div>
+            <div class="card-body">
+                {% if all_books %}
+                    <div class="row row-cols-1 row-cols-md-2 g-4">
+                        {% for book in all_books %}
+                            <div class="col">
+                                <div class="card book-card h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ book.book_name }}</h5>
+                                        <p class="card-text text-muted">
+                                            Uploaded on {{ book.upload_date.strftime('%Y-%m-%d') }}
+                                        </p>
+                                    </div>
+                                    <div class="card-footer bg-transparent">
+                                        <form method="POST" action="{{ url_for('access_book', book_id=book.id) }}">
+                                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                                            <button type="submit" class="btn btn-sm btn-primary">
+                                                Get Access (14 days)
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p>No books available at the moment.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5>Your Accessible Books</h5>
+            </div>
+            <div class="card-body">
+                {% if accessible_books %}
+                    <div class="list-group">
+                        {% for book in accessible_books %}
+                            <a href="{{ url_for('view_book', book_id=book.id) }}" 
+                               class="list-group-item list-group-item-action">
+                                {{ book.book_name }}
+                                <span class="badge bg-secondary float-end">
+                                    Expires: {{ book.expires_at.strftime('%Y-%m-%d') }}
+                                </span>
+                            </a>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p>You don't have access to any books yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Admin Dashboard</h2>
+    <div>
+        <span class="badge bg-primary">Logged in as {{ username }}</span>
+        <a href="{{ url_for('admin_logout') }}" class="btn btn-sm btn-outline-danger ms-2">Logout</a>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Manage Books</h5>
+        <a href="{{ url_for('admin_upload_book') }}" class="btn btn-sm btn-success">Upload New Book</a>
+    </div>
+    <div class="card-body">
+        {% if books %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Book Name</th>
+                            <th>Upload Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for book in books %}
+                            <tr>
+                                <td>{{ book.book_name }}</td>
+                                <td>{{ book.upload_date.strftime('%Y-%m-%d %H:%M') }}</td>
+                                <td>
+                                    <form method="POST" action="{{ url_for('admin_remove_book', book_id=book.id) }}" 
+                                          style="display: inline;">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                                        <button type="submit" class="btn btn-sm btn-danger">Remove</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="alert alert-info">
+                No books have been uploaded yet.
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

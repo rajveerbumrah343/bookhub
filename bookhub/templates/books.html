@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="mb-4">Your Books</h2>
+
+<div class="card">
+    <div class="card-body">
+        {% if accessible_books %}
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+                {% for book in accessible_books %}
+                    <div class="col">
+                        <div class="card book-card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ book.book_name }}</h5>
+                                <p class="card-text text-muted">
+                                    Expires on {{ book.expires_at.strftime('%Y-%m-%d') }}
+                                </p>
+                            </div>
+                            <div class="card-footer bg-transparent">
+                                <a href="{{ url_for('view_book', book_id=book.id) }}" 
+                                   class="btn btn-sm btn-primary">
+                                    Read Now
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-info">
+                You don't have access to any books yet. Visit the dashboard to get access.
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
