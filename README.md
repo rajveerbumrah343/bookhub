@@ -1,1 +1,57 @@
 # bookhub
+
++-------------------+
+| Tables_in_bookhub |
++-------------------+
+| admin_logs        |
+| books             |
+| user_book_access  |
+| users             |
++-------------------+
+
+
+admin_logs
++-----------+--------------+------+-----+---------+----------------+
+| Field     | Type         | Null | Key | Default | Extra          |
++-----------+--------------+------+-----+---------+----------------+
+| id        | int(11)      | NO   | PRI | NULL    | auto_increment |
+| admin_id  | int(11)      | NO   | MUL | NULL    |                |
+| action    | varchar(255) | NO   |     | NULL    |                |
+| timestamp | datetime     | NO   |     | NULL    |                |
++-----------+--------------+------+-----+---------+----------------+
+
+books
++-------------+--------------+------+-----+---------+----------------+
+| Field       | Type         | Null | Key | Default | Extra          |
++-------------+--------------+------+-----+---------+----------------+
+| id          | int(11)      | NO   | PRI | NULL    | auto_increment |
+| book_name   | varchar(255) | NO   |     | NULL    |                |
+| pdf_url     | varchar(512) | NO   |     | NULL    |                |
+| upload_date | datetime     | NO   |     | NULL    |                |
+| uploaded_by | int(11)      | NO   | MUL | NULL    |                |
+| is_active   | tinyint(1)   | YES  |     | 1       |                |
++-------------+--------------+------+-----+---------+----------------+
+
+user_book_access
++------------+----------+------+-----+---------+----------------+
+| Field      | Type     | Null | Key | Default | Extra          |
++------------+----------+------+-----+---------+----------------+
+| id         | int(11)  | NO   | PRI | NULL    | auto_increment |
+| user_id    | int(11)  | NO   | MUL | NULL    |                |
+| book_id    | int(11)  | NO   | MUL | NULL    |                |
+| granted_at | datetime | NO   |     | NULL    |                |
+| expires_at | datetime | NO   |     | NULL    |                |
++------------+----------+------+-----+---------+----------------+
+
+
+users
++---------------+--------------+------+-----+---------------------+----------------+
+| Field         | Type         | Null | Key | Default             | Extra          |
++---------------+--------------+------+-----+---------------------+----------------+
+| id            | int(11)      | NO   | PRI | NULL                | auto_increment |
+| username      | varchar(50)  | NO   |     | NULL                |                |
+| email         | varchar(100) | NO   | UNI | NULL                |                |
+| password_hash | varchar(255) | NO   |     | NULL                |                |
+| is_admin      | tinyint(1)   | YES  |     | 0                   |                |
+| created_at    | timestamp    | NO   |     | current_timestamp() |                |
++---------------+--------------+------+-----+---------------------+----------------+
