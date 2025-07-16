@@ -20,10 +20,30 @@
     </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
+<canvas id="pdf-canvas"></canvas>
+
 <script>
-    // Automatically open the PDF in a new tab
-    window.onload = function() {
-        window.open('{{ book.pdf_url }}', '_blank');
-    };
+  const url = 'https://cdn.supabase.com/mybooks/physics.pdf';
+
+  const loadingTask = pdfjsLib.getDocument(url);
+  loadingTask.promise.then(function(pdf) {
+    pdf.getPage(1).then(function(page) {
+      const scale = 1.5;
+      const viewport = page.getViewport({ scale: scale });
+
+      const canvas = document.getElementById('pdf-canvas');
+      const context = canvas.getContext('2d');
+      canvas.height = viewport.height;
+      canvas.width = viewport.width;
+
+      const renderContext = {
+        canvasContext: context,
+        viewport: viewport
+      };
+      page.render(renderContext);
+    });
+  });
 </script>
+
 {% endblock %}
